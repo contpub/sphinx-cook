@@ -1,2 +1,69 @@
-#!/bin/bash
+#!/usr/bin/python
+import sys
+import os
+import urllib2
+import commands
+import shutil
+import fnmatch
 
+print 'Sphinx-cook processing... "', sys.argv[1], '"'
+
+rootPath = os.path.abspath(sys.argv[1])
+
+print rootPath
+
+os.chdir(rootPath)
+
+print "Download required files..."
+
+if not os.path.exists('/tmp/sphinx-cook'):
+	os.mkdir('/tmp/sphinx-cook')
+
+if not os.path.exists('/tmp/sphinx-cook/conf.py'):
+	remotefile = urllib2.urlopen('https://github.com/contpub/sphinx-cook/raw/master/toolkit/conf.py')
+	localFile = open('/tmp/sphinx-cook/conf.py', 'w')
+	localFile.write(remotefile.read())
+	localFile.close()
+
+if not os.path.exists('/tmp/sphinx-cook/Makefile'):
+	remotefile = urllib2.urlopen('https://github.com/contpub/sphinx-cook/raw/master/toolkit/Makefile')
+	localFile = open('/tmp/sphinx-cook/Makefile', 'w')
+	localFile.write(remotefile.read())
+	localFile.close()
+
+shutil.copy('/tmp/sphinx-cook/conf.py', '.')
+shutil.copy('/tmp/sphinx-cook/Makefile', '.')
+
+print "Sphinx building..."
+commands.getstatusoutput('make epub')
+commands.getstatusoutput('make latex')
+
+print "XeLaTeX processing..."
+if os.path.exists('_build/latex'):
+	os.chdir(rootPath + '/_build/latex')
+	commands.getstatusoutput('xelatex *.tex')
+	commands.getstatusoutput('xelatex *.tex')
+	os.chdir(rootPath)
+
+if not os.path.exists('cook'):
+	os.mkdir('cook')
+
+import os
+
+for root, dirnames, filenames in os.walk('_build/latex'):
+	for filename in fnmatch.filter(filenames, '*.tex'):
+		shutil.copy(os.path.join(root, filename), 'cook')
+
+for root, dirnames, filenames in os.walk('_build/latex'):
+	for filename in fnmatch.filter(filenames, '*.pdf'):
+		shutil.copy(os.path.join(root, filename), 'cook')
+
+for root, dirnames, filenames in os.walk('_build/epub'):
+	for filename in fnmatch.filter(filenames, '*.epub'):
+		shutil.copy(os.path.join(root, filename), 'cook')
+
+print commands.getstatusoutput('make clean')
+
+shutil.rmtree('_build')
+os.remove('conf.py')
+os.remove('Makefile')
