@@ -62,7 +62,7 @@ for root, dirnames, filenames in os.walk('_build/epub'):
 	for filename in fnmatch.filter(filenames, '*.epub'):
 		shutil.copy(os.path.join(root, filename), 'cook')
 
-print commands.getstatusoutput('make clean')
+commands.getstatusoutput('make clean')
 
 shutil.rmtree('_build')
 os.remove('conf.py')
