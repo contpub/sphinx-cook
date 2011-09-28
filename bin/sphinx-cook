@@ -41,8 +41,8 @@ commands.getstatusoutput('make latex')
 print "XeLaTeX processing..."
 if os.path.exists('_build/latex'):
 	os.chdir(rootPath + '/_build/latex')
-	commands.getstatusoutput('xelatex *.tex')
-	commands.getstatusoutput('xelatex *.tex')
+	commands.getstatusoutput('xelatex --halt-on-error *.tex')
+	commands.getstatusoutput('xelatex --halt-on-error *.tex')
 	os.chdir(rootPath)
 
 if not os.path.exists('cook'):
