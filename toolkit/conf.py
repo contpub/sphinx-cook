@@ -6,10 +6,35 @@ import sys, os, codecs
 lines = codecs.open('index.rst', 'r', 'utf-8').readlines()
 rstconf = {}
 
+rstconf['project'] = 'project'
+rstconf['copyright'] = 'copyright'
+rstconf['version'] = '1.0'
+rstconf['release'] = '1.0'
+rstconf['title'] = 'title'
+rstconf['authors'] = 'authors'
+rstconf['basename'] = 'project'
+rstconf['latex_paper_size'] = 'a4'
+rstconf['latex_font_size'] = '12pt'
+rstconf['epub_basename'] = None
+rstconf['latex_documents_target_name'] = None
+rstconf['latex_documents_title'] = None
+rstconf['latex_documents_author'] = None
+rstconf['latex_logo'] = None
+
 for line in lines:
 	if line[:4] == '   @':
 		idx = line.find(':')
 		rstconf[line[4:idx]] = line[idx+2:len(line)-1]
+
+if rstconf['epub_basename'] is None:
+	rstconf['epub_basename']=rstconf['basename']
+if rstconf['latex_documents_target_name'] is None:
+	rstconf['latex_documents_target_name']=rstconf['basename']+'.tex'
+if rstconf['latex_documents_title'] is None:
+	rstconf['latex_documents_title']=rstconf['title']
+if rstconf['latex_documents_author'] is None:
+	rstconf['latex_documents_author']=rstconf['authors']
+
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
