@@ -131,7 +131,7 @@ latex_preamble = '''\\usepackage[cm-default]{fontspec}
 \\setromanfont[BoldFont=Apple LiGothic Medium]{Apple LiSung Light}
 \\setmonofont{Monaco}
 \\renewcommand{\\baselinestretch}{1.25}
-\\DefineVerbatimEnvironment{Verbatim}{Verbatim}{numbers=left, fontsize=\\relsize{-1}}
+\\DefineVerbatimEnvironment{Verbatim}{Verbatim}{fontsize=\\relsize{-1}}
 '''
 
 #latex_appendices = []
