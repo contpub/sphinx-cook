@@ -15,6 +15,7 @@ rstconf['authors'] = 'authors'
 rstconf['publisher'] = 'ContPub'
 rstconf['basename'] = 'project'
 rstconf['identifier'] = 'http://contpub.org/'
+rstconf['language'] = 'en'
 
 rstconf['latex_paper_size'] = 'a4'
 rstconf['latex_font_size'] = '12pt'
@@ -31,6 +32,7 @@ rstconf['epub_copyright'] = None
 rstconf['epub_identifier'] = None
 rstconf['epub_scheme'] = None
 rstconf['epub_cover'] = ()
+rstconf['epub_language'] = None
 
 for line in lines:
 	if line[:4] == '   @':
@@ -38,26 +40,28 @@ for line in lines:
 		rstconf[line[4:idx]] = line[idx+2:len(line)-1]
 
 if rstconf['latex_documents_target_name'] is None:
-	rstconf['latex_documents_target_name']=rstconf['basename']+'.tex'
+	rstconf['latex_documents_target_name'] = rstconf['basename']+'.tex'
 if rstconf['latex_documents_title'] is None:
-	rstconf['latex_documents_title']=rstconf['title']
+	rstconf['latex_documents_title'] = rstconf['title']
 if rstconf['latex_documents_author'] is None:
-	rstconf['latex_documents_author']=rstconf['authors']
+	rstconf['latex_documents_author'] = rstconf['authors']
 
 if rstconf['epub_basename'] is None:
-	rstconf['epub_basename']=rstconf['basename']
+	rstconf['epub_basename'] = rstconf['basename']
 if rstconf['epub_title'] is None:
-	rstconf['epub_title']=rstconf['title']
+	rstconf['epub_title'] = rstconf['title']
 if rstconf['epub_author'] is None:
-	rstconf['epub_author']=rstconf['authors']
+	rstconf['epub_author'] = rstconf['authors']
 if rstconf['epub_publisher'] is None:
-	rstconf['epub_publisher']=rstconf['publisher']
+	rstconf['epub_publisher'] = rstconf['publisher']
 if rstconf['epub_copyright'] is None:
-	rstconf['epub_copyright']=rstconf['copyright']
+	rstconf['epub_copyright'] = rstconf['copyright']
 if rstconf['epub_identifier'] is None:
-	rstconf['epub_identifier']=rstconf['identifier']
+	rstconf['epub_identifier'] = rstconf['identifier']
 if rstconf['epub_scheme'] is None:
-	rstconf['epub_scheme']=rstconf['identifier']
+	rstconf['epub_scheme'] = rstconf['identifier']
+if rstconf['epub_language'] is None:
+	rstconf['epub_language'] = rstconf['language']
 
 #sys.path.insert(0, os.path.abspath('.'))
 
@@ -141,5 +145,5 @@ epub_copyright = rstconf['epub_copyright']
 epub_identifier = rstconf['epub_identifier']
 epub_scheme = rstconf['epub_scheme']
 epub_cover = rstconf['epub_cover']
-
+epub_language = rstconf['epub_language']
 
