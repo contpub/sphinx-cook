@@ -33,6 +33,7 @@ rstconf['epub_identifier'] = None
 rstconf['epub_scheme'] = None
 rstconf['epub_cover'] = ()
 rstconf['epub_language'] = None
+rstconf['epub_tocdepth'] = 1
 
 for line in lines:
 	if line[:4] == '   @':
@@ -146,4 +147,4 @@ epub_identifier = rstconf['epub_identifier']
 epub_scheme = rstconf['epub_scheme']
 epub_cover = rstconf['epub_cover']
 epub_language = rstconf['epub_language']
-
+epub_tocdepth = rstconf['epub_tocdepth']
