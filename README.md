@@ -20,3 +20,9 @@ It contains following outputs:
 * *.epub
 * *.pdf
 * *.tex
+
+Patch steps
+------------
+
+* Sphinx HTML Writer (for \n letter spaces problem) http://gist.github.com/1281418
+* Better sphinx themes http://github.com/contpub/sphinx-themes
