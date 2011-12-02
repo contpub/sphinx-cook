@@ -25,6 +25,7 @@ rstconf['latex_documents_author'] = None
 rstconf['latex_logo'] = None
 
 rstconf['epub_basename'] = None
+rstconf['epub_theme'] = 'epub'
 rstconf['epub_title'] = None
 rstconf['epub_author'] = None
 rstconf['epub_publisher'] = None
@@ -139,6 +140,7 @@ latex_preamble = '''\\usepackage[cm-default]{fontspec}
 
 # -- Options for ePub output --------------------------------------------------
 epub_basename = rstconf['epub_basename']
+epub_theme = rstconf['epub_theme']
 epub_title = rstconf['epub_title']
 epub_author = rstconf['epub_author']
 epub_publisher = rstconf['epub_publisher']
