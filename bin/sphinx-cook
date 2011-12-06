@@ -81,10 +81,6 @@ if not os.path.exists('cook'):
 import os
 
 for root, dirnames, filenames in os.walk('_build/latex'):
-	for filename in fnmatch.filter(filenames, '*.tex'):
-		shutil.copy(os.path.join(root, filename), 'cook')
-
-for root, dirnames, filenames in os.walk('_build/latex'):
 	for filename in fnmatch.filter(filenames, '*.pdf'):
 		shutil.copy(os.path.join(root, filename), 'cook')
 
