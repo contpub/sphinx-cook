@@ -130,7 +130,8 @@ latex_preamble = '''\\usepackage[cm-default]{fontspec}
 %% use xeCJK
 
 \\usepackage[slantfont,boldfont,CJKaddspaces,CJKchecksingle,CJKnumber,fallback]{xeCJK}
-\\usepackage{xltxtra}
+
+%% \\usepackage{xltxtra}
 %% \\usepackage{CJKfntef}
 
 \\XeTeXlinebreaklocale "zh"
