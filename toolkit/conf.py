@@ -126,13 +126,28 @@ latex_preamble = '''\\usepackage[cm-default]{fontspec}
 \\usepackage{fontspec}
 \\usepackage{titlesec}
 \\usepackage{fancyvrb,relsize}
-\\usepackage[slantfont,boldfont]{xeCJK}
+
+%% use xeCJK
+
+\\usepackage[slantfont,boldfont,CJKaddspaces,CJKchecksingle,CJKnumber,fallback]{xeCJK}
+\\usepackage{xltxtra}
+%% \\usepackage{CJKfntef}
+
 \\XeTeXlinebreaklocale "zh"
 \\XeTeXlinebreakskip = 0pt plus 1pt
-\\setmainfont[BoldFont=Adobe Heiti Std]{Adobe Song Std}
-\\setCJKmainfont[BoldFont=Adobe Heiti Std]{Adobe Song Std}
-\\setromanfont[BoldFont=Adobe Heiti Std]{Adobe Song Std}
+\\defaultfontfeatures{Mapping=tex-text}
+
+\\setCJKmainfont[BoldFont={Adobe Heiti Std}]{Adobe Song Std}
+%% \\setCJKfallbackfamilyfont{\CJKrmdefault}{Apple LiSung}
+\\setCJKsansfont{Adobe Heiti Std} 
+\\setCJKmonofont{Adobe Fangsong Std} 
+\\setCJKromanfont{Adobe Song Std}
+
+\\setmainfont{Times New Roman}
+\\setsansfont{Arial}
 \\setmonofont{Monaco}
+\\setromanfont{Verdana}
+
 \\renewcommand{\\baselinestretch}{1.25}
 \\DefineVerbatimEnvironment{Verbatim}{Verbatim}{fontsize=\\relsize{-1}}
 '''
