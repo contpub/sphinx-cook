@@ -66,14 +66,14 @@ shutil.copy('/tmp/sphinx-cook/Makefile', '.')
 
 print "Sphinx building..."
 commands.getstatusoutput('make epub')
-commands.getstatusoutput('make latex')
+commands.getstatusoutput('make pdflatex')
 
-print "XeLaTeX processing..."
-if os.path.exists('_build/latex'):
-	os.chdir(rootPath + '/_build/latex')
-	commands.getstatusoutput('xelatex --halt-on-error *.tex')
-	commands.getstatusoutput('xelatex --halt-on-error *.tex')
-	os.chdir(rootPath)
+# print "XeLaTeX processing..."
+# if os.path.exists('_build/latex'):
+#	os.chdir(rootPath + '/_build/latex')
+#	commands.getstatusoutput('xelatex --halt-on-error *.tex')
+#	commands.getstatusoutput('xelatex --halt-on-error *.tex')
+#	os.chdir(rootPath)
 
 if not os.path.exists('cook'):
 	os.mkdir('cook')

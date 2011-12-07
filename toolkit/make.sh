@@ -2,14 +2,7 @@
 
 # make clean
 make epub
-make latex
-
-cd _build/latex
-xelatex *.tex
-xelatex *.tex
-
-cd ..
-cd ..
+make pdflatex
 
 cp -f _build/latex/*.pdf free/
 cp -f _build/epub/*.epub free/
