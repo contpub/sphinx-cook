@@ -66,7 +66,7 @@ shutil.copy('/tmp/sphinx-cook/Makefile', '.')
 
 print "Sphinx building..."
 commands.getstatusoutput('make epub')
-commands.getstatusoutput('make pdflatex')
+commands.getstatusoutput('make latexpdf')
 
 # print "XeLaTeX processing..."
 # if os.path.exists('_build/latex'):
