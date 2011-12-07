@@ -22,6 +22,7 @@ rstconf['latex_font_size'] = '12pt'
 rstconf['latex_documents_target_name'] = None
 rstconf['latex_documents_title'] = None
 rstconf['latex_documents_author'] = None
+rstconf['latex_docclass'] = 'manual'
 rstconf['latex_logo'] = None
 
 rstconf['epub_basename'] = None
@@ -109,7 +110,8 @@ latex_documents = [
   ('index',
    rstconf['latex_documents_target_name'],
    rstconf['latex_documents_title'],
-   rstconf['latex_documents_author'], 'manual'),
+   rstconf['latex_documents_author'],
+   rstconf['latex_docclass']),
 ]
 
 latex_logo = rstconf['latex_logo']
