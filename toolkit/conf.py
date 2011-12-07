@@ -127,9 +127,9 @@ latex_preamble = '''\\usepackage[cm-default]{fontspec}
 \\usepackage[slantfont,boldfont]{xeCJK}
 \\XeTeXlinebreaklocale "zh"
 \\XeTeXlinebreakskip = 0pt plus 1pt
-\\setmainfont[BoldFont=Apple LiGothic Medium]{Apple LiSung Light}
-\\setCJKmainfont[BoldFont=Apple LiGothic Medium]{Apple LiSung Light}
-\\setromanfont[BoldFont=Apple LiGothic Medium]{Apple LiSung Light}
+\\setmainfont[BoldFont=Adobe Heiti Std]{Adobe Song Std}
+\\setCJKmainfont[BoldFont=Adobe Heiti Std]{Adobe Song Std}
+\\setromanfont[BoldFont=Adobe Heiti Std]{Adobe Song Std}
 \\setmonofont{Monaco}
 \\renewcommand{\\baselinestretch}{1.25}
 \\DefineVerbatimEnvironment{Verbatim}{Verbatim}{fontsize=\\relsize{-1}}
