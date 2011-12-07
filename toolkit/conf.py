@@ -8,8 +8,8 @@ rstconf = {}
 
 rstconf['project'] = 'project'
 rstconf['copyright'] = 'copyright'
-rstconf['version'] = '1.0'
-rstconf['release'] = '1.0'
+rstconf['version'] = None
+rstconf['release'] = None
 rstconf['title'] = 'title'
 rstconf['authors'] = 'authors'
 rstconf['publisher'] = 'ContPub'
