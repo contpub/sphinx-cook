@@ -140,6 +140,8 @@ latex_preamble = '''\\usepackage[cm-default]{fontspec}
 #latex_appendices = []
 #latex_domain_indices = True
 
+latex_elements = { 'releasename': '' }
+
 # -- Options for ePub output --------------------------------------------------
 epub_basename = rstconf['epub_basename']
 epub_theme = rstconf['epub_theme']
