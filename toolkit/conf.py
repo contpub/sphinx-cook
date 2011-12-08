@@ -70,8 +70,10 @@ if rstconf['epub_language'] is None:
 
 # -- General configuration -----------------------------------------------------
 
+sys.path.append(os.path.abspath('sphinxext'))
+
 #needs_sphinx = '1.0'
-extensions = []
+extensions = ['sphinx.ext.pngmath']
 
 templates_path = ['_templates']
 
