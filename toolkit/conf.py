@@ -146,10 +146,10 @@ latex_preamble = '''\\usepackage[cm-default]{fontspec}
 \\setCJKmonofont{Adobe Fangsong Std} 
 \\setCJKromanfont[BoldFont={Adobe Kaiti Std},ItalicFont={Adobe Fangsong Std}]{Adobe Ming Std}
 
-\\setmainfont{Times New Roman}
-\\setsansfont{Arial}
+%% \\setmainfont{Times New Roman}
+%% \\setsansfont{Arial}
 \\setmonofont{Monaco}
-\\setromanfont{Verdana}
+%% \\setromanfont{Verdana}
 
 \\renewcommand{\\baselinestretch}{1.25}
 \\DefineVerbatimEnvironment{Verbatim}{Verbatim}{fontsize=\\relsize{-1}}
