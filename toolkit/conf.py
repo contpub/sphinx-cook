@@ -135,21 +135,21 @@ latex_preamble = '''\\usepackage[cm-default]{fontspec}
 
 %% \\usepackage{xltxtra}
 %% \\usepackage{CJKfntef}
+%% \\setCJKfallbackfamilyfont{\CJKrmdefault}{Apple LiSung}
 
 \\XeTeXlinebreaklocale "zh"
 \\XeTeXlinebreakskip = 0pt plus 1pt
 \\defaultfontfeatures{Mapping=tex-text}
 
-\\setCJKmainfont[BoldFont={Adobe Heiti Std}]{Adobe Song Std}
-%% \\setCJKfallbackfamilyfont{\CJKrmdefault}{Apple LiSung}
+\\setCJKmainfont[BoldFont={Adobe Heiti Std},ItalicFont={Adobe Kaiti Std}]{Adobe Song Std}
 \\setCJKsansfont{Adobe Heiti Std} 
 \\setCJKmonofont{Adobe Fangsong Std} 
-\\setCJKromanfont{Adobe Song Std}
+\\setCJKromanfont[BoldFont={Adobe Kaiti Std},ItalicFont={Adobe Fangsong Std}]{Adobe Ming Std}
 
-%% \\setmainfont{Times New Roman}
-%% \\setsansfont{Arial}
+\\setmainfont{Times New Roman}
+\\setsansfont{Arial}
 \\setmonofont{Monaco}
-%% \\setromanfont{Verdana}
+\\setromanfont{Verdana}
 
 \\renewcommand{\\baselinestretch}{1.25}
 \\DefineVerbatimEnvironment{Verbatim}{Verbatim}{fontsize=\\relsize{-1}}
