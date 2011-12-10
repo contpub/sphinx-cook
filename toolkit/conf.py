@@ -141,10 +141,10 @@ latex_preamble = '''\\usepackage[cm-default]{fontspec}
 \\XeTeXlinebreakskip = 0pt plus 1pt
 \\defaultfontfeatures{Mapping=tex-text}
 
-\\setCJKmainfont[BoldFont={Adobe Heiti Std},ItalicFont={Adobe Kaiti Std}]{Adobe Song Std}
+\\setCJKmainfont[BoldFont={Adobe Heiti Std},ItalicFont={Adobe Fangsong Std},BoldItalicFont={Adobe Kaiti Std}]{Adobe Song Std}
 \\setCJKsansfont{Adobe Heiti Std} 
 \\setCJKmonofont{Adobe Fangsong Std} 
-\\setCJKromanfont[BoldFont={Adobe Kaiti Std},ItalicFont={Adobe Fangsong Std}]{Adobe Ming Std}
+\\setCJKromanfont[BoldFont={Adobe Heiti Std},ItalicFont={Adobe Fangsong Std},BoldItalicFont={Adobe Kaiti Std}]{Adobe Ming Std}
 
 %% \\setmainfont{Times New Roman}
 %% \\setsansfont{Arial}
