@@ -34,46 +34,11 @@ if not os.path.exists('/tmp/sphinx-cook/Makefile'):
 shutil.copy('/tmp/sphinx-cook/conf.py', '.')
 shutil.copy('/tmp/sphinx-cook/Makefile', '.')
 
-# Backup
-
-#rst_files = []
-#for obj in os.listdir('.'):
-#	if os.path.isfile(obj):
-#		if obj.endswith('.rst'):
-#			rst_files.append(obj)
-
-#for obj in rst_files:
-#	print 'Backup... ', obj
-#	shutil.move(obj, obj + '.bak')
-#	shutil.copy(obj + '.bak', obj)
-
-# Pre-process
-
-#for obj in rst_files:
-#	fd = open( obj + '.bak', 'r' )
-#	line = fd.readline()
-#	while (line != '' ):
-#		if (line == "\n"):
-#			sys.stdout.write("<P>")
-		#if ( line.endswith("\n") ):
-		#	print "<LINE> "
-		#sys.stdout.write(line)
-#
-#		line = fd.readline()
-#	fd.close()
-
 # Build
 
 print "Sphinx building..."
 commands.getstatusoutput('make epub')
 commands.getstatusoutput('make latexpdf')
-
-# print "XeLaTeX processing..."
-# if os.path.exists('_build/latex'):
-#	os.chdir(rootPath + '/_build/latex')
-#	commands.getstatusoutput('xelatex --halt-on-error *.tex')
-#	commands.getstatusoutput('xelatex --halt-on-error *.tex')
-#	os.chdir(rootPath)
 
 if not os.path.exists('cook'):
 	os.mkdir('cook')
@@ -82,7 +47,8 @@ import os
 
 for root, dirnames, filenames in os.walk('_build/latex'):
 	for filename in fnmatch.filter(filenames, '*.pdf'):
-		shutil.copy(os.path.join(root, filename), 'cook')
+		if not filename.startswith('graphviz'):
+			shutil.copy(os.path.join(root, filename), 'cook')
 
 for root, dirnames, filenames in os.walk('_build/epub'):
 	for filename in fnmatch.filter(filenames, '*.epub'):
@@ -93,10 +59,4 @@ commands.getstatusoutput('make clean')
 shutil.rmtree('_build')
 os.remove('conf.py')
 os.remove('Makefile')
-
-# Restore
-#for obj in rst_files:
-#	print 'Restore... ', obj
-#	os.remove(obj)
-#	shutil.move(obj + '.bak', obj)
 
