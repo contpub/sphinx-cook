@@ -20,21 +20,22 @@ print 'root path: ', rootPath
 
 os.chdir(rootPath)
 
-lines = codecs.open('index.rst', 'r', 'utf-8').readlines()
 
 images = []
 
 imageLocalPattern = re.compile('^[a-zA-Z0-9\-\_]+\.(gif|png|jpg|jpeg|tiff|eps)$', re.IGNORECASE)
 
-for line in lines:
-	if line[:10] == '   @image:':
-		idx = line.find(':')
-		tokens = line[idx+2:len(line)-1].split(' ')
-		if len(tokens) == 2:
-			remote = tokens[0].strip()
-			local = tokens[1].strip()
-			if imageLocalPattern.match(local):
-				images.append( [remote, local] )
+for rstPath in glob.glob('*.rst'):
+	lines = codecs.open(rstPath, 'r', 'utf-8').readlines()
+	for line in lines:
+		if line[:10] == '   @image:':
+			idx = line.find(':')
+			tokens = line[idx+2:len(line)-1].split(' ')
+			if len(tokens) == 2:
+				remote = tokens[0].strip()
+				local = tokens[1].strip()
+				if imageLocalPattern.match(local):
+					images.append( [remote, local] )
 
 if len(images) > 0:
 	for img in images:
