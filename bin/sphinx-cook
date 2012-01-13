@@ -75,6 +75,7 @@ shutil.copy('/tmp/sphinx-cook/Makefile', '.')
 
 print "sphinx building..."
 commands.getstatusoutput('make epub')
+commands.getstatusoutput('make mobi')
 commands.getstatusoutput('make latexpdf')
 
 if not os.path.exists('cook'):
@@ -82,14 +83,18 @@ if not os.path.exists('cook'):
 
 import os
 
+for root, dirnames, filenames in os.walk('_build/epub'):
+	for filename in fnmatch.filter(filenames, '*.epub'):
+		shutil.copy(os.path.join(root, filename), 'cook')
+
+for root, dirnames, filenames in os.walk('_build/mobi'):
+	for filename in fnmatch.filter(filenames, '*.mobi'):
+		shutil.copy(os.path.join(root, filename), 'cook')
+
 for root, dirnames, filenames in os.walk('_build/latex'):
 	for filename in fnmatch.filter(filenames, '*.pdf'):
 		if not filename.startswith('graphviz'):
 			shutil.copy(os.path.join(root, filename), 'cook')
-
-for root, dirnames, filenames in os.walk('_build/epub'):
-	for filename in fnmatch.filter(filenames, '*.epub'):
-		shutil.copy(os.path.join(root, filename), 'cook')
 
 commands.getstatusoutput('make clean')
 

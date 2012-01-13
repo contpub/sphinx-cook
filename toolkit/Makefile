@@ -71,6 +71,11 @@ epub:
 	@echo
 	@echo "Build finished. The epub file is in $(BUILDDIR)/epub."
 
+mobi:
+	$(SPHINXBUILD) -b mobi $(ALLSPHINXOPTS) $(BUILDDIR)/mobi
+	@echo
+	@echo "Build finished. The mobi file is in $(BUILDDIR)/mobi."
+
 latex:
 	$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) $(BUILDDIR)/latex
 	@echo

@@ -6,6 +6,7 @@ make latexpdf
 
 cp -f _build/latex/*.pdf free/
 cp -f _build/epub/*.epub free/
+cp -f _build/mobi/*.mobi free/
 
 make clean
 
