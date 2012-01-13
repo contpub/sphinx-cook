@@ -12,7 +12,7 @@ import string
 import glob
 import re
 
-print 'sphinx-cook processing... "', sys.argv[1], '"'
+print 'sphinx-cook processing...'
 
 rootPath = os.path.abspath(sys.argv[1])
 
@@ -20,18 +20,19 @@ print 'root path: ', rootPath
 
 os.chdir(rootPath)
 
-
 images = []
 
 imageLocalPattern = re.compile('^[a-zA-Z0-9\-\_]+\.(gif|png|jpg|jpeg|tiff|eps)$', re.IGNORECASE)
 
 for rstPath in glob.glob('*.rst'):
+	print 'scanning %s' % rstPath
 	lines = codecs.open(rstPath, 'r', 'utf-8').readlines()
 	for line in lines:
 		if line[:10] == '   @image:':
+			print 'found %s' % line.strip()
 			idx = line.find(':')
-			tokens = line[idx+2:len(line)-1].split(' ')
-			if len(tokens) == 2:
+			tokens = line[idx+2:len(line)-1].strip().split(' ')
+			if len(tokens) >= 2:
 				remote = tokens[0].strip()
 				local = tokens[1].strip()
 				if imageLocalPattern.match(local):
