@@ -37,6 +37,8 @@ rstconf['epub_cover'] = ()
 rstconf['epub_language'] = None
 rstconf['epub_tocdepth'] = 1
 
+rstconf['mobi_theme'] = 'mobi'
+
 for line in lines:
 	if line[:4] == '   @':
 		idx = line.find(':')
@@ -172,3 +174,6 @@ epub_scheme = rstconf['epub_scheme']
 epub_cover = rstconf['epub_cover']
 epub_language = rstconf['epub_language']
 epub_tocdepth = rstconf['epub_tocdepth']
+
+# -- Options for mobi output --------------------------------------------------
+mobi_theme = rstconf['mobi_theme']
