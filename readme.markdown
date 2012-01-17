@@ -12,6 +12,10 @@ Following repository is fork from official sphinx and contains improvements (cle
 
 * https://bitbucket.org/lyhcode/sphinx
 
+KindleGen
+
+* http://www.amazon.com/gp/feature.html?ie=UTF8&docId=1000234621
+
 Install sphinx-cook
 -------------------
 
