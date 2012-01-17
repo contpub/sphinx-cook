@@ -1,6 +1,8 @@
 sphinx-cook
 ===========
 
+Make sphinx easier for end users.
+
 Requirements
 ------------
 
