@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from string import Template
 import sys, os, codecs
 
 # Read index.rst configurations
@@ -11,11 +12,13 @@ rstconf['copyright'] = 'copyright'
 rstconf['version'] = ''
 rstconf['release'] = ''
 rstconf['title'] = 'title'
+rstconf['subtitle'] = 'subtitle'
 rstconf['authors'] = 'authors'
 rstconf['publisher'] = 'ContPub'
 rstconf['basename'] = 'project'
 rstconf['identifier'] = 'http://contpub.org/'
 rstconf['language'] = 'en'
+rstconf['keywords'] = 'contpub, ebook'
 
 rstconf['latex_paper_size'] = 'a4'
 rstconf['latex_font_size'] = '12pt'
@@ -124,12 +127,23 @@ latex_logo = rstconf['latex_logo']
 #latex_show_pagerefs = False
 #latex_show_urls = False
 
-latex_preamble = '''\\usepackage[cm-default]{fontspec}
+_latex_preamble = Template('''\\usepackage[cm-default]{fontspec}
 %% \\usepackage{xunicode}
 \\usepackage{xcolor}
 \\usepackage{fontspec}
 \\usepackage{titlesec}
 \\usepackage{fancyvrb,relsize}
+
+\\usepackage{hyperref}
+\\hypersetup{%
+pdftitle = {$pdftitle},
+pdfsubject = {$pdfsubject},
+pdfkeywords = {$pdfkeywords},
+pdfauthor = {$pdfauthor},
+pdfcreator = {ContPub},
+pdfproducer = {TeX Live},
+}
+%% \\pdfinfo{/CreationDate (D:19990909000000-01'00')}
 
 %% use xeCJK
 
@@ -155,7 +169,7 @@ latex_preamble = '''\\usepackage[cm-default]{fontspec}
 
 \\renewcommand{\\baselinestretch}{1.25}
 \\DefineVerbatimEnvironment{Verbatim}{Verbatim}{fontsize=\\relsize{-1}}
-'''
+''').substitute(pdftitle=rstconf['title'], pdfsubject=rstconf['subtitle'], pdfkeywords=rstconf['keywords'], pdfauthor=rstconf['authors'])
 
 #latex_appendices = []
 #latex_domain_indices = True
