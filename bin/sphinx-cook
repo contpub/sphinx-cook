@@ -78,13 +78,19 @@ if not os.path.exists('cook'):
 	os.mkdir('cook')
 
 print "sphinx building..."
-commands.getstatusoutput('make latexpdf')
 
+print "pdf"
+
+commands.getstatusoutput('make latexpdf')
 for root, dirnames, filenames in os.walk('_build/latex'):
 	for filename in fnmatch.filter(filenames, '*.pdf'):
 		if not filename.startswith('graphviz'):
+			basename = os.path.splitext(os.path.basename(filename))[0]
 			shutil.copy(os.path.join(root, filename), 'cook')
+			commands.getstatusoutput('pdf2ps cook/'+filename+' cook/'+basename+'.ps')
+			commands.getstatusoutput('ps2pdf14 -dMaxSubsetPct=100 -dCompatibilityLevel=1.2 -dSubsetFonts=true -dEmbedAllFonts=true -dPDFSETTINGS=/prepress cook/'+basename+'.ps cook/'+basename+'.gs.pdf')
 
+print "epub"
 
 commands.getstatusoutput('make epub')
 for root, dirnames, filenames in os.walk('_build/epub'):
@@ -92,12 +98,16 @@ for root, dirnames, filenames in os.walk('_build/epub'):
 		shutil.copy(os.path.join(root, filename), 'cook')
 
 
+print "mobi"
+
 commands.getstatusoutput('make mobi')
 
 for root, dirnames, filenames in os.walk('_build/mobi'):
 	for filename in fnmatch.filter(filenames, '*.mobi'):
 		shutil.copy(os.path.join(root, filename), 'cook')
 
+
+print "cleanup"
 
 commands.getstatusoutput('make clean')
 
