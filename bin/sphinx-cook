@@ -41,6 +41,8 @@ for rstPath in glob.glob('*.rst'):
 # Read configuration from index.rst
 lines = codecs.open('index.rst', 'r', 'utf-8').readlines()
 rstconf = {}
+rstconf['pdf_cover'] = None
+
 for line in lines:
     if line[:4] == '   @':
         idx = line.find(':')
