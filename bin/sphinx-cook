@@ -25,49 +25,57 @@ images = []
 imageLocalPattern = re.compile('^[a-zA-Z0-9\-\_]+\.(gif|png|jpg|jpeg|tiff|eps)$', re.IGNORECASE)
 
 for rstPath in glob.glob('*.rst'):
-	print 'scanning %s' % rstPath
-	lines = codecs.open(rstPath, 'r', 'utf-8').readlines()
-	for line in lines:
-		if line[:10] == '   @image:':
-			print 'found %s' % line.strip()
-			idx = line.find(':')
-			tokens = line[idx+2:len(line)-1].strip().split(' ')
-			if len(tokens) >= 2:
-				remote = tokens[0].strip()
-				local = tokens[1].strip()
-				if imageLocalPattern.match(local):
-					images.append( [remote, local] )
+    print 'scanning %s' % rstPath
+    lines = codecs.open(rstPath, 'r', 'utf-8').readlines()
+    for line in lines:
+        if line[:10] == '   @image:':
+            print 'found %s' % line.strip()
+            idx = line.find(':')
+            tokens = line[idx+2:len(line)-1].strip().split(' ')
+            if len(tokens) >= 2:
+                remote = tokens[0].strip()
+                local = tokens[1].strip()
+                if imageLocalPattern.match(local):
+                    images.append( [remote, local] )
+
+# Read configuration from index.rst
+lines = codecs.open('index.rst', 'r', 'utf-8').readlines()
+rstconf = {}
+for line in lines:
+    if line[:4] == '   @':
+        idx = line.find(':')
+        rstconf[line[4:idx]] = line[idx+2:len(line)-1]
 
 if len(images) > 0:
-	for img in images:
-		print 'download: ', img[0]
-		try:
-			headers = { 'User-Agent' : 'Mozilla/5.0' }
-			request = urllib2.Request(img[0], None, headers)
-			response = urllib2.urlopen(request)
-			localFile = open(img[1], 'w')
-			localFile.write(response.read())
-			localFile.close()
-			print 'saved.'
-		except:
-			print 'skipped.'
+    for img in images:
+        print 'download: ', img[0]
+        try:
+            headers = { 'User-Agent' : 'Mozilla/5.0' }
+            request = urllib2.Request(img[0], None, headers)
+            response = urllib2.urlopen(request)
+            localFile = open(img[1], 'w')
+            localFile.write(response.read())
+            localFile.close()
+            print 'saved.'
+        except:
+            print 'skipped.'
 
 print "Download required files..."
 
 if not os.path.exists('/tmp/sphinx-cook'):
-	os.mkdir('/tmp/sphinx-cook')
+    os.mkdir('/tmp/sphinx-cook')
 
 if not os.path.exists('/tmp/sphinx-cook/conf.py'):
-	remotefile = urllib2.urlopen('https://github.com/contpub/sphinx-cook/raw/master/toolkit/conf.py')
-	localFile = open('/tmp/sphinx-cook/conf.py', 'w')
-	localFile.write(remotefile.read())
-	localFile.close()
+    remotefile = urllib2.urlopen('https://github.com/contpub/sphinx-cook/raw/master/toolkit/conf.py')
+    localFile = open('/tmp/sphinx-cook/conf.py', 'w')
+    localFile.write(remotefile.read())
+    localFile.close()
 
 if not os.path.exists('/tmp/sphinx-cook/Makefile'):
-	remotefile = urllib2.urlopen('https://github.com/contpub/sphinx-cook/raw/master/toolkit/Makefile')
-	localFile = open('/tmp/sphinx-cook/Makefile', 'w')
-	localFile.write(remotefile.read())
-	localFile.close()
+    remotefile = urllib2.urlopen('https://github.com/contpub/sphinx-cook/raw/master/toolkit/Makefile')
+    localFile = open('/tmp/sphinx-cook/Makefile', 'w')
+    localFile.write(remotefile.read())
+    localFile.close()
 
 shutil.copy('/tmp/sphinx-cook/conf.py', '.')
 shutil.copy('/tmp/sphinx-cook/Makefile', '.')
@@ -75,36 +83,40 @@ shutil.copy('/tmp/sphinx-cook/Makefile', '.')
 # Build
 
 if not os.path.exists('cook'):
-	os.mkdir('cook')
+    os.mkdir('cook')
 
 print "sphinx building..."
 
 print "pdf"
-
 commands.getstatusoutput('make latexpdf')
 for root, dirnames, filenames in os.walk('_build/latex'):
-	for filename in fnmatch.filter(filenames, '*.pdf'):
-		if not filename.startswith('graphviz'):
-			basename = os.path.splitext(os.path.basename(filename))[0]
-			shutil.copy(os.path.join(root, filename), 'cook')
-			commands.getstatusoutput('pdf2ps cook/'+filename+' cook/'+basename+'.ps')
-			commands.getstatusoutput('ps2pdf14 -dMaxSubsetPct=100 -dCompatibilityLevel=1.2 -dSubsetFonts=true -dEmbedAllFonts=true -dPDFSETTINGS=/prepress cook/'+basename+'.ps cook/'+basename+'.gs.pdf')
+    for filename in fnmatch.filter(filenames, '*.pdf'):
+        if not filename.startswith('graphviz'):
+            basename = os.path.splitext(os.path.basename(filename))[0]
+            shutil.copy(os.path.join(root, filename), 'cook')
+            if rstconf['pdf_cover'] is None:
+                print "pdftk: add cover"
+                commands.getstatusoutput('pdftk cook/'+basename+'.pdf dump_data_utf8 > combine.info')
+                commands.getstatusoutput('pdftk '+rstconf['pdf_cover']+' cook/'+basename+'.pdf cat output combine.pdf')
+                commands.getstatusoutput('pdftk combine.pdf update_info_utf8 combine.info output cook/'+basename+'.pdf')
+                os.remove('combine.info')
+                os.remove('combine.pdf')
+            commands.getstatusoutput('pdf2ps cook/'+filename+' cook/'+basename+'.ps')
+            commands.getstatusoutput('ps2pdf14 -dMaxSubsetPct=100 -dCompatibilityLevel=1.2 -dSubsetFonts=true -dEmbedAllFonts=true -dPDFSETTINGS=/prepress cook/'+basename+'.ps cook/'+basename+'.gs.pdf')
+            os.remove('cook/'+basename+'.ps')
 
 print "epub"
-
 commands.getstatusoutput('make epub')
 for root, dirnames, filenames in os.walk('_build/epub'):
-	for filename in fnmatch.filter(filenames, '*.epub'):
-		shutil.copy(os.path.join(root, filename), 'cook')
+    for filename in fnmatch.filter(filenames, '*.epub'):
+        shutil.copy(os.path.join(root, filename), 'cook')
 
 
 print "mobi"
-
 commands.getstatusoutput('make mobi')
-
 for root, dirnames, filenames in os.walk('_build/mobi'):
-	for filename in fnmatch.filter(filenames, '*.mobi'):
-		shutil.copy(os.path.join(root, filename), 'cook')
+    for filename in fnmatch.filter(filenames, '*.mobi'):
+        shutil.copy(os.path.join(root, filename), 'cook')
 
 
 print "cleanup"
