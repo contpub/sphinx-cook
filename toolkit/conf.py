@@ -181,6 +181,7 @@ latex_elements = { 'releasename': '' }
 html_show_sourcelink = False
 html_show_copyright = False
 html_show_sphinx = False
+html_static_path = ['_static']
 
 # -- Options for ePub output --------------------------------------------------
 epub_basename = rstconf['epub_basename']
