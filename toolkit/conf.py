@@ -101,6 +101,7 @@ exclude_patterns = ['_build']
 #add_module_names = True
 #show_authors = False
 pygments_style = 'sphinx'
+highlight_language = 'none'
 
 #modindex_common_prefix = []
 
@@ -175,6 +176,11 @@ pdfproducer = {TeX Live},
 #latex_domain_indices = True
 
 latex_elements = { 'releasename': '' }
+
+# -- Options for HTML output --------------------------------------------------
+html_show_sourcelink = False
+html_show_copyright = False
+html_show_sphinx = False
 
 # -- Options for ePub output --------------------------------------------------
 epub_basename = rstconf['epub_basename']
