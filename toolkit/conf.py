@@ -163,10 +163,10 @@ pdfproducer = {TeX Live},
 \\setCJKmonofont{Adobe Ming Std} 
 \\setCJKromanfont[BoldFont={Adobe Heiti Std},ItalicFont={Adobe Fangsong Std},BoldItalicFont={Adobe Kaiti Std}]{Adobe Song Std}
 
-\\setmainfont{Adobe Garamond Pro}
-\\setsansfont{Myriad Pro}
+\\setmainfont[BoldFont={Myriad Pro}]{Adobe Garamond Pro}
+\\setsansfont[BoldFont={Myriad Pro}]{Adobe Garamond Pro}
 \\setmonofont{Courier Std}
-\\setromanfont{Adobe Garamond Pro}
+\\setromanfont[BoldFont={Myriad Pro}]{Adobe Garamond Pro}
 
 \\renewcommand{\\baselinestretch}{1.25}
 \\DefineVerbatimEnvironment{Verbatim}{Verbatim}{fontsize=\\relsize{-1}}
