@@ -100,7 +100,7 @@ exclude_patterns = ['_build']
 #add_function_parentheses = True
 #add_module_names = True
 #show_authors = False
-pygments_style = 'sphinx'
+pygments_style = 'trac' #default is sphinx
 highlight_language = 'none'
 
 #modindex_common_prefix = []
