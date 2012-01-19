@@ -162,10 +162,10 @@ pdfproducer = {TeX Live},
 \\setCJKmonofont{Adobe Ming Std} 
 \\setCJKromanfont[BoldFont={Adobe Heiti Std},ItalicFont={Adobe Fangsong Std},BoldItalicFont={Adobe Kaiti Std}]{Adobe Song Std}
 
-\\setmainfont[BoldFont={Adobe Heiti Std},ItalicFont={Adobe Fangsong Std},BoldItalicFont={Adobe Kaiti Std}]{Adobe Song Std}
-\\setsansfont[BoldFont={Adobe Heiti Std},ItalicFont={Adobe Fangsong Std},BoldItalicFont={Adobe Kaiti Std}]{Adobe Song Std}
-\\setmonofont{Monaco}
-\\setromanfont[BoldFont={Adobe Heiti Std},ItalicFont={Adobe Fangsong Std},BoldItalicFont={Adobe Kaiti Std}]{Adobe Song Std}
+\\setmainfont{Adobe Garamond Pro}
+\\setsansfont{Myriad Pro}
+\\setmonofont{Courier Std}
+\\setromanfont{Adobe Garamond Pro}
 
 \\renewcommand{\\baselinestretch}{1.25}
 \\DefineVerbatimEnvironment{Verbatim}{Verbatim}{fontsize=\\relsize{-1}}
