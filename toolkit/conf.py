@@ -192,7 +192,9 @@ epub_copyright = rstconf['epub_copyright']
 epub_identifier = rstconf['epub_identifier']
 epub_scheme = rstconf['epub_scheme']
 if not rstconf['epub_cover'] is None:
-    epub_cover = (rstconf['epub_cover'])
+    epub_cover = (rstconf['epub_cover'], 'epub-cover.html')
+else:
+    epub_cover = ()
 epub_language = rstconf['epub_language']
 epub_tocdepth = rstconf['epub_tocdepth']
 
