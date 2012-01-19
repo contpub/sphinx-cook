@@ -36,7 +36,7 @@ rstconf['epub_publisher'] = None
 rstconf['epub_copyright'] = None
 rstconf['epub_identifier'] = None
 rstconf['epub_scheme'] = None
-rstconf['epub_cover'] = ()
+rstconf['epub_cover'] = None
 rstconf['epub_language'] = None
 rstconf['epub_tocdepth'] = 1
 
@@ -185,7 +185,8 @@ epub_publisher = rstconf['epub_publisher']
 epub_copyright = rstconf['epub_copyright']
 epub_identifier = rstconf['epub_identifier']
 epub_scheme = rstconf['epub_scheme']
-epub_cover = rstconf['epub_cover']
+if not rstconf['epub_cover'] is None:
+    epub_cover = (rstconf['epub_cover'])
 epub_language = rstconf['epub_language']
 epub_tocdepth = rstconf['epub_tocdepth']
 
