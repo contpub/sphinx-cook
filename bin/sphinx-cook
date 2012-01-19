@@ -94,7 +94,7 @@ for root, dirnames, filenames in os.walk('_build/latex'):
         if not filename.startswith('graphviz'):
             basename = os.path.splitext(os.path.basename(filename))[0]
             shutil.copy(os.path.join(root, filename), 'cook')
-            if rstconf['pdf_cover'] is None:
+            if not rstconf['pdf_cover'] is None:
                 print "pdftk: add cover"
                 commands.getstatusoutput('pdftk cook/'+basename+'.pdf dump_data_utf8 > combine.info')
                 commands.getstatusoutput('pdftk '+rstconf['pdf_cover']+' cook/'+basename+'.pdf cat output combine.pdf')
