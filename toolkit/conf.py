@@ -127,7 +127,7 @@ latex_logo = rstconf['latex_logo']
 #latex_show_pagerefs = False
 #latex_show_urls = False
 
-_latex_preamble = Template('''\\usepackage[cm-default]{fontspec}
+latex_preamble = Template('''\\usepackage[cm-default]{fontspec}
 %% \\usepackage{xunicode}
 \\usepackage{xcolor}
 \\usepackage{fontspec}
