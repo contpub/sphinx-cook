@@ -20,6 +20,7 @@ rstconf['identifier'] = 'http://contpub.org/'
 rstconf['language'] = 'en'
 rstconf['keywords'] = 'contpub, ebook'
 
+rstconf['latex_parindent'] = '0em'
 rstconf['latex_paper_size'] = 'a4'
 rstconf['latex_font_size'] = '12pt'
 rstconf['latex_documents_target_name'] = None
@@ -27,6 +28,7 @@ rstconf['latex_documents_title'] = None
 rstconf['latex_documents_author'] = None
 rstconf['latex_docclass'] = 'manual'
 rstconf['latex_logo'] = None
+rstconf['latex_contentsname'] = 'Contents'
 
 rstconf['epub_basename'] = None
 rstconf['epub_theme'] = 'epub'
@@ -89,8 +91,7 @@ project = rstconf['project']
 copyright = rstconf['copyright']
 version = rstconf['version']
 release = rstconf['release']
-
-#language = 'zh_TW'
+language = rstconf['language']
 #today = ''
 #today_fmt = '%B %d, %Y'
 
@@ -123,15 +124,21 @@ latex_documents = [
 ]
 
 latex_logo = rstconf['latex_logo']
+latex_contentsname = rstconf['latex_contentsname']
 
 #latex_use_parts = False
 #latex_show_pagerefs = False
 #latex_show_urls = False
 
-latex_preamble = Template('''\\usepackage[cm-default]{fontspec}
+latex_preamble = Template('''
+%% \\usepackage[cm-default]{fontspec}
+
+\\usepackage{indentfirst}
+\\setlength{\\parindent}{$parindent}
+
+\\usepackage{fontspec}
 %% \\usepackage{xunicode}
 \\usepackage{xcolor}
-\\usepackage{fontspec}
 \\usepackage{titlesec}
 \\usepackage{fancyvrb,relsize}
 
@@ -170,12 +177,32 @@ pdfproducer = {TeX Live},
 
 \\renewcommand{\\baselinestretch}{1.25}
 \\DefineVerbatimEnvironment{Verbatim}{Verbatim}{fontsize=\\relsize{-1}}
-''').substitute(pdftitle=rstconf['title'], pdfsubject=rstconf['subtitle'], pdfkeywords=rstconf['keywords'], pdfauthor=rstconf['authors'])
+
+\\usepackage{enumitem}
+\\setitemize{leftmargin=2em}
+\\setenumerate{leftmargin=2em}
+
+''').substitute(pdftitle=rstconf['title'], pdfsubject=rstconf['subtitle'], pdfkeywords=rstconf['keywords'], pdfauthor=rstconf['authors'], parindent=rstconf['latex_parindent'])
 
 #latex_appendices = []
 #latex_domain_indices = True
 
-latex_elements = { 'releasename': '' }
+latex_elements = {
+#'papersize': '',
+#'pointsize': '',
+'babel': '\\usepackage{polyglossia}',
+#'fontpkg': '',
+#'fncychap': '',
+#'preamble': '',
+#'footer': '',
+#'inputenc': '',
+#'fontenc': '',
+#'maketitle': '',
+#'tableofcontents': '',
+#'printindex': '',
+'releasename': ''
+#'docclass' 'classoptions' 'title' 'date' 'release' 'author' 'logo' 'releasename' 'makeindex' 'shorthandoff'
+}
 
 # -- Options for HTML output --------------------------------------------------
 html_show_sourcelink = False

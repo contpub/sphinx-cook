@@ -89,6 +89,15 @@ if not os.path.exists('cook'):
 
 print "sphinx building..."
 
+print "cover"
+if rstconf['pdf_cover']=='cover.tex':
+    commands.getstatusoutput('make latexcover')
+    shutil.copy('cover.png', rstconf['epub_cover'])
+    shutil.copy('cover.pdf', 'cook/cover.pdf')
+    os.remove('cover.png')
+    os.remove('cover.pdf')
+    rstconf['pdf_cover'] = 'cook/cover.pdf'
+
 print "pdf"
 commands.getstatusoutput('make latexpdf')
 for root, dirnames, filenames in os.walk('_build/latex'):
@@ -98,14 +107,14 @@ for root, dirnames, filenames in os.walk('_build/latex'):
             shutil.copy(os.path.join(root, filename), 'cook')
             if not rstconf['pdf_cover'] is None:
                 print "pdftk: add cover"
-                commands.getstatusoutput('pdftk cook/'+basename+'.pdf dump_data_utf8 > combine.info')
-                commands.getstatusoutput('pdftk '+rstconf['pdf_cover']+' cook/'+basename+'.pdf cat output combine.pdf')
-                commands.getstatusoutput('pdftk combine.pdf update_info_utf8 combine.info output cook/'+basename+'.pdf')
-                os.remove('combine.info')
-                os.remove('combine.pdf')
-            commands.getstatusoutput('pdf2ps cook/'+filename+' cook/'+basename+'.ps')
-            commands.getstatusoutput('ps2pdf14 -dMaxSubsetPct=100 -dCompatibilityLevel=1.2 -dSubsetFonts=true -dEmbedAllFonts=true -dPDFSETTINGS=/prepress cook/'+basename+'.ps cook/'+basename+'.gs.pdf')
-            os.remove('cook/'+basename+'.ps')
+                commands.getstatusoutput('pdftk cook/'+basename+'.pdf dump_data_utf8 > .combine.info')
+                commands.getstatusoutput('pdftk '+rstconf['pdf_cover']+' cook/'+basename+'.pdf cat output .combine.pdf')
+                commands.getstatusoutput('pdftk .combine.pdf update_info_utf8 .combine.info output cook/'+basename+'.pdf')
+                os.remove('.combine.info')
+                os.remove('.combine.pdf')
+            # commands.getstatusoutput('pdf2ps cook/'+filename+' cook/'+basename+'.ps')
+            # commands.getstatusoutput('ps2pdf14 -dMaxSubsetPct=100 -dCompatibilityLevel=1.2 -dSubsetFonts=true -dEmbedAllFonts=true -dPDFSETTINGS=/prepress cook/'+basename+'.ps cook/'+basename+'.gs.pdf')
+            # os.remove('cook/'+basename+'.ps')
 
 print "epub"
 commands.getstatusoutput('make epub')
