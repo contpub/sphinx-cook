@@ -91,7 +91,7 @@ latexpdf:
 
 latexcover:
 	@echo "Running LaTeX cover files through pdflatex(xelatex)..."
-	xelatex cover.tex
+	xelatex -halt-on-error cover.tex
 	rm -f cover.aux cover.log
 	@echo "Convert cover.pdf to cover.png using ImageMagic(convert)..."
 	convert cover.pdf cover.png
