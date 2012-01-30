@@ -107,9 +107,9 @@ for root, dirnames, filenames in os.walk('_build/latex'):
             shutil.copy(os.path.join(root, filename), 'cook')
             if not rstconf['pdf_cover'] is None:
                 print "pdftk: add cover"
-                commands.getstatusoutput('pdftk cook/'+basename+'.pdf dump_data_utf8 > .combine.info')
+                commands.getstatusoutput('pdftk cook/'+basename+'.pdf dump_data > .combine.info')
                 commands.getstatusoutput('pdftk '+rstconf['pdf_cover']+' cook/'+basename+'.pdf cat output .combine.pdf')
-                commands.getstatusoutput('pdftk .combine.pdf update_info_utf8 .combine.info output cook/'+basename+'.pdf')
+                commands.getstatusoutput('pdftk .combine.pdf update_info .combine.info output cook/'+basename+'.pdf')
                 os.remove('.combine.info')
                 os.remove('.combine.pdf')
             # commands.getstatusoutput('pdf2ps cook/'+filename+' cook/'+basename+'.ps')
