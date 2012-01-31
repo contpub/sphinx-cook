@@ -64,23 +64,24 @@ if len(images) > 0:
 
 print "Download required files..."
 
-if not os.path.exists('/tmp/sphinx-cook'):
-    os.mkdir('/tmp/sphinx-cook')
+__cache_path = os.getenv('HOME')+'/.sphinx-cook'
+__cache_conf_path = __cache_path+'/conf.py'
+__cache_makefile_path = __cache_path+'/Makefile'
 
-if not os.path.exists('/tmp/sphinx-cook/conf.py'):
-    remotefile = urllib2.urlopen('https://github.com/contpub/sphinx-cook/raw/master/toolkit/conf.py')
-    localFile = open('/tmp/sphinx-cook/conf.py', 'w')
-    localFile.write(remotefile.read())
-    localFile.close()
+if not os.path.exists(__cache_path):
+    os.mkdir(__cache_path)
 
-if not os.path.exists('/tmp/sphinx-cook/Makefile'):
-    remotefile = urllib2.urlopen('https://github.com/contpub/sphinx-cook/raw/master/toolkit/Makefile')
-    localFile = open('/tmp/sphinx-cook/Makefile', 'w')
-    localFile.write(remotefile.read())
-    localFile.close()
+def readcache(remote, local):
+    if not os.path.exists(local):
+        remotefile = urllib2.urlopen(remote)
+        localFile = open(local, 'w')
+        localFile.write(remotefile.read())
+        localFile.close()
 
-shutil.copy('/tmp/sphinx-cook/conf.py', '.')
-shutil.copy('/tmp/sphinx-cook/Makefile', '.')
+readcache('https://github.com/contpub/sphinx-cook/raw/master/toolkit/conf.py', __cache_conf_path)
+readcache('https://github.com/contpub/sphinx-cook/raw/master/toolkit/Makefile', __cache_makefile_path)
+shutil.copy(__cache_conf_path, '.')
+shutil.copy(__cache_makefile_path, '.')
 
 # Build
 
