@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import sys
 import os
+import getopt
 import urllib2
 #import httplib2
 import commands
@@ -12,13 +13,55 @@ import string
 import glob
 import re
 
+opts, args = getopt.getopt(sys.argv[1:], "f:h", ['format=','help'])
+
+__opt_format = 'cover,pdf,epub,mobi'
+
+def help():
+    print 'Examples:'
+    print 'sphinx-cook -f cover,pdf,epub,mobi /path/to/ebook'
+
+for a, o in opts:
+    if a in ('-h', '--help'):
+        help()
+        exit()
+    if a in ('-f', '--format'):
+        __opt_format = o
+
+if len(args) == 0:
+    print 'No path specified.'
+    exit()
+
 print 'sphinx-cook processing...'
 
-rootPath = os.path.abspath(sys.argv[1])
+rootPath = os.path.abspath(args[0])
 
-print 'root path: ', rootPath
+print 'ebook path: ', rootPath
 
 os.chdir(rootPath)
+
+print "download required files..."
+
+__cache_path = os.getenv('HOME')+'/.sphinx-cook'
+__cache_conf_path = __cache_path+'/conf.py'
+__cache_makefile_path = __cache_path+'/Makefile'
+
+if not os.path.exists(__cache_path):
+    os.mkdir(__cache_path)
+
+def readcache(remote, local):
+    if not os.path.exists(local):
+        remotefile = urllib2.urlopen(remote)
+        localFile = open(local, 'w')
+        localFile.write(remotefile.read())
+        localFile.close()
+
+readcache('https://github.com/contpub/sphinx-cook/raw/master/toolkit/conf.py', __cache_conf_path)
+readcache('https://github.com/contpub/sphinx-cook/raw/master/toolkit/Makefile', __cache_makefile_path)
+shutil.copy(__cache_conf_path, '.')
+shutil.copy(__cache_makefile_path, '.')
+
+# download images
 
 images = []
 
@@ -62,27 +105,6 @@ if len(images) > 0:
         except:
             print 'skipped.'
 
-print "Download required files..."
-
-__cache_path = os.getenv('HOME')+'/.sphinx-cook'
-__cache_conf_path = __cache_path+'/conf.py'
-__cache_makefile_path = __cache_path+'/Makefile'
-
-if not os.path.exists(__cache_path):
-    os.mkdir(__cache_path)
-
-def readcache(remote, local):
-    if not os.path.exists(local):
-        remotefile = urllib2.urlopen(remote)
-        localFile = open(local, 'w')
-        localFile.write(remotefile.read())
-        localFile.close()
-
-readcache('https://github.com/contpub/sphinx-cook/raw/master/toolkit/conf.py', __cache_conf_path)
-readcache('https://github.com/contpub/sphinx-cook/raw/master/toolkit/Makefile', __cache_makefile_path)
-shutil.copy(__cache_conf_path, '.')
-shutil.copy(__cache_makefile_path, '.')
-
 # Build
 
 if not os.path.exists('cook'):
@@ -90,51 +112,58 @@ if not os.path.exists('cook'):
 
 print "sphinx building..."
 
-print "cover"
-if rstconf['pdf_cover']=='cover.tex':
-    commands.getstatusoutput('make latexcover')
-    shutil.copy('cover.png', rstconf['epub_cover'])
-    shutil.copy('cover.pdf', 'cook/cover.pdf')
-    os.remove('cover.png')
-    os.remove('cover.pdf')
-    rstconf['pdf_cover'] = 'cook/cover.pdf'
+__formats = __opt_format.split(',')
+__formats_cover = 'cover' in __formats
+__formats_pdf = 'pdf' in __formats
+__formats_epub = 'epub' in __formats
+__formats_mobi = 'mobi' in __formats
 
-print "pdf"
-commands.getstatusoutput('make latexpdf')
-for root, dirnames, filenames in os.walk('_build/latex'):
-    for filename in fnmatch.filter(filenames, '*.pdf'):
-        if not filename.startswith('graphviz'):
-            basename = os.path.splitext(os.path.basename(filename))[0]
+if __formats_cover:
+    print "make cover"
+    if rstconf['pdf_cover']=='cover.tex':
+        commands.getstatusoutput('make latexcover')
+        shutil.copy('cover.png', rstconf['epub_cover'])
+        shutil.copy('cover.pdf', 'cook/cover.pdf')
+        os.remove('cover.png')
+        os.remove('cover.pdf')
+        rstconf['pdf_cover'] = 'cook/cover.pdf'
+
+if __formats_pdf:
+    print "make pdf"
+    commands.getstatusoutput('make latexpdf')
+    for root, dirnames, filenames in os.walk('_build/latex'):
+        for filename in fnmatch.filter(filenames, '*.pdf'):
+            if not filename.startswith('graphviz'):
+                basename = os.path.splitext(os.path.basename(filename))[0]
+                shutil.copy(os.path.join(root, filename), 'cook')
+                if not rstconf['pdf_cover'] in (None, 'cover.tex'):
+                    print "pdftk: add cover"
+                    commands.getstatusoutput('pdftk cook/'+basename+'.pdf dump_data > .combine.info')
+                    commands.getstatusoutput('pdftk '+rstconf['pdf_cover']+' cook/'+basename+'.pdf cat output .combine.pdf')
+                    commands.getstatusoutput('pdftk .combine.pdf update_info .combine.info output cook/'+basename+'.pdf')
+                    os.remove('.combine.info')
+                    os.remove('.combine.pdf')
+                # covert to portable pdf
+                # commands.getstatusoutput('pdf2ps cook/'+filename+' cook/'+basename+'.ps')
+                # commands.getstatusoutput('ps2pdf14 -dMaxSubsetPct=100 -dCompatibilityLevel=1.2 -dSubsetFonts=true -dEmbedAllFonts=true -dPDFSETTINGS=/prepress cook/'+basename+'.ps cook/'+basename+'.gs.pdf')
+                # os.remove('cook/'+basename+'.ps')
+
+if __formats_epub:
+    print "epub"
+    commands.getstatusoutput('make epub')
+    for root, dirnames, filenames in os.walk('_build/epub'):
+        for filename in fnmatch.filter(filenames, '*.epub'):
             shutil.copy(os.path.join(root, filename), 'cook')
-            if not rstconf['pdf_cover'] is None:
-                print "pdftk: add cover"
-                commands.getstatusoutput('pdftk cook/'+basename+'.pdf dump_data > .combine.info')
-                commands.getstatusoutput('pdftk '+rstconf['pdf_cover']+' cook/'+basename+'.pdf cat output .combine.pdf')
-                commands.getstatusoutput('pdftk .combine.pdf update_info .combine.info output cook/'+basename+'.pdf')
-                os.remove('.combine.info')
-                os.remove('.combine.pdf')
-            # commands.getstatusoutput('pdf2ps cook/'+filename+' cook/'+basename+'.ps')
-            # commands.getstatusoutput('ps2pdf14 -dMaxSubsetPct=100 -dCompatibilityLevel=1.2 -dSubsetFonts=true -dEmbedAllFonts=true -dPDFSETTINGS=/prepress cook/'+basename+'.ps cook/'+basename+'.gs.pdf')
-            # os.remove('cook/'+basename+'.ps')
-
-print "epub"
-commands.getstatusoutput('make epub')
-for root, dirnames, filenames in os.walk('_build/epub'):
-    for filename in fnmatch.filter(filenames, '*.epub'):
-        shutil.copy(os.path.join(root, filename), 'cook')
-
-
-print "mobi"
-commands.getstatusoutput('make mobi')
-for root, dirnames, filenames in os.walk('_build/mobi'):
-    for filename in fnmatch.filter(filenames, '*.mobi'):
-        shutil.copy(os.path.join(root, filename), 'cook')
-
+ 
+if __formats_mobi:
+    print "mobi"
+    commands.getstatusoutput('make mobi')
+    for root, dirnames, filenames in os.walk('_build/mobi'):
+        for filename in fnmatch.filter(filenames, '*.mobi'):
+            shutil.copy(os.path.join(root, filename), 'cook') 
 
 print "cleanup"
-
 commands.getstatusoutput('make clean')
-
 shutil.rmtree('_build')
 os.remove('conf.py')
 os.remove('Makefile')
