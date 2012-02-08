@@ -163,8 +163,12 @@ if __formats_mobi:
             shutil.copy(os.path.join(root, filename), 'cook') 
 
 print "cleanup"
+
 commands.getstatusoutput('make clean')
-shutil.rmtree('_build')
+
+if os.path.exists('_build'):
+    shutil.rmtree('_build')
+
 os.remove('conf.py')
 os.remove('Makefile')
 
