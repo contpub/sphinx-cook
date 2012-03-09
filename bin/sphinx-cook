@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import sys
 import os
 import getopt
@@ -12,6 +14,16 @@ import urlparse
 import string
 import glob
 import re
+import logging
+from subprocess import Popen, PIPE, STDOUT
+
+# output utf-8 support
+# sys.stdout = codecs.getwriter('utf8')(sys.stdout)
+# reload(sys)
+# sys.setdefaultencoding("utf-8")
+
+if (sys.stdout.encoding != 'UTF-8'): 
+    print >> sys.stderr, "please set python env PYTHONIOENCODING=UTF-8, example: export PYTHONIOENCODING=UTF-8, when write to stdout." 
 
 opts, args = getopt.getopt(sys.argv[1:], "f:h", ['format=','help'])
 
@@ -111,6 +123,30 @@ if len(images) > 0:
 if not os.path.exists('cook'):
     os.mkdir('cook')
 
+# Logging
+
+logfile = 'cook/'+rstconf['basename']+'.log'
+
+if (os.path.exists(logfile)):
+    os.remove(logfile)
+
+logger = logging.getLogger('sphinx-cook')
+hdlr = logging.FileHandler(logfile)
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+hdlr.setFormatter(formatter)
+logger.addHandler(hdlr)
+logger.setLevel(logging.INFO)
+
+def execute(cmd, silent=False):
+    proc = Popen(cmd, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=True)
+    (stdout, stderr) = proc.communicate()
+    if (not silent):
+        logger.info(stdout)
+        if (proc.returncode != 0):
+            logger.error(stderr)
+
+logger.info('sphinx building...')
+
 print "sphinx building..."
 
 __formats = __opt_format.split(',')
@@ -120,19 +156,22 @@ __formats_epub = 'epub' in __formats
 __formats_mobi = 'mobi' in __formats
 __formats_html = 'html' in __formats
 
+__remove_cover_after_make_pdf = False
+
 if __formats_cover:
     print "make cover"
     if rstconf['pdf_cover']=='cover.tex':
-        commands.getstatusoutput('make latexcover')
+        execute('make latexcover')
         shutil.copy('cover.png', rstconf['epub_cover'])
         shutil.copy('cover.pdf', 'cook/cover.pdf')
         os.remove('cover.png')
         os.remove('cover.pdf')
         rstconf['pdf_cover'] = 'cook/cover.pdf'
+        __remove_cover_after_make_pdf = True
 
 if __formats_pdf:
     print "make pdf"
-    commands.getstatusoutput('make latexpdf')
+    execute('make latexpdf')
     for root, dirnames, filenames in os.walk('_build/latex'):
         for filename in fnmatch.filter(filenames, '*.pdf'):
             if not filename.startswith('graphviz'):
@@ -140,9 +179,9 @@ if __formats_pdf:
                 shutil.copy(os.path.join(root, filename), 'cook')
                 if not rstconf['pdf_cover'] in (None, 'cover.tex'):
                     print "pdftk: add cover"
-                    commands.getstatusoutput('pdftk cook/'+basename+'.pdf dump_data > .combine.info')
-                    commands.getstatusoutput('pdftk '+rstconf['pdf_cover']+' cook/'+basename+'.pdf cat output .combine.pdf')
-                    commands.getstatusoutput('pdftk .combine.pdf update_info .combine.info output cook/'+basename+'.pdf')
+                    execute('pdftk cook/'+basename+'.pdf dump_data > .combine.info')
+                    execute('pdftk '+rstconf['pdf_cover']+' cook/'+basename+'.pdf cat output .combine.pdf')
+                    execute('pdftk .combine.pdf update_info .combine.info output cook/'+basename+'.pdf')
                     os.remove('.combine.info')
                     os.remove('.combine.pdf')
                 # covert to portable pdf
@@ -150,32 +189,37 @@ if __formats_pdf:
                 # commands.getstatusoutput('ps2pdf14 -dMaxSubsetPct=100 -dCompatibilityLevel=1.2 -dSubsetFonts=true -dEmbedAllFonts=true -dPDFSETTINGS=/prepress cook/'+basename+'.ps cook/'+basename+'.gs.pdf')
                 # os.remove('cook/'+basename+'.ps')
 
+# Remove Cover PDF (make from cover.tex)
+if (__remove_cover_after_make_pdf):
+    if (os.path.exists('cook/cover.pdf')):
+        os.remove('cook/cover.pdf')
+
 if __formats_epub:
     print "epub"
-    commands.getstatusoutput('make epub')
+    execute('make epub')
     for root, dirnames, filenames in os.walk('_build/epub'):
         for filename in fnmatch.filter(filenames, '*.epub'):
             shutil.copy(os.path.join(root, filename), 'cook')
  
 if __formats_mobi:
     print "mobi"
-    commands.getstatusoutput('make mobi')
+    execute('make mobi')
     for root, dirnames, filenames in os.walk('_build/mobi'):
         for filename in fnmatch.filter(filenames, '*.mobi'):
             shutil.copy(os.path.join(root, filename), 'cook') 
 
 if __formats_html:
     print "html"
-    commands.getstatusoutput('make html')
+    execute('make html')
     if os.path.exists('_build/html'):
         os.chdir('_build/html')
-        commands.getstatusoutput('zip -r ../'+rstconf['basename']+'.zip *')
+        execute('zip -r ../'+rstconf['basename']+'.zip *')
         os.chdir(rootPath)
         shutil.copy('_build/'+rstconf['basename']+'.zip', 'cook') 
 
 print "cleanup"
 
-commands.getstatusoutput('make clean')
+execute('make clean', True)
 
 if os.path.exists('_build'):
     shutil.rmtree('_build')
