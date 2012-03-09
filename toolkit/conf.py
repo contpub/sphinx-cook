@@ -30,6 +30,8 @@ rstconf['latex_docclass'] = 'manual'
 rstconf['latex_logo'] = None
 rstconf['latex_contentsname'] = 'Contents'
 
+rstconf['html_theme'] = 'default'
+
 rstconf['epub_basename'] = None
 rstconf['epub_theme'] = 'epub'
 rstconf['epub_title'] = None
@@ -209,6 +211,7 @@ html_show_sourcelink = False
 html_show_copyright = False
 html_show_sphinx = False
 html_static_path = ['_static']
+html_theme = rstconf['html_theme']
 
 # -- Options for ePub output --------------------------------------------------
 epub_basename = rstconf['epub_basename']
