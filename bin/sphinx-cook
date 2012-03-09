@@ -85,6 +85,7 @@ for rstPath in glob.glob('*.rst'):
 lines = codecs.open('index.rst', 'r', 'utf-8').readlines()
 rstconf = {}
 rstconf['pdf_cover'] = None
+rstconf['basename'] = 'project'
 
 for line in lines:
     if line[:4] == '   @':
@@ -117,6 +118,7 @@ __formats_cover = 'cover' in __formats
 __formats_pdf = 'pdf' in __formats
 __formats_epub = 'epub' in __formats
 __formats_mobi = 'mobi' in __formats
+__formats_html = 'html' in __formats
 
 if __formats_cover:
     print "make cover"
@@ -161,6 +163,15 @@ if __formats_mobi:
     for root, dirnames, filenames in os.walk('_build/mobi'):
         for filename in fnmatch.filter(filenames, '*.mobi'):
             shutil.copy(os.path.join(root, filename), 'cook') 
+
+if __formats_html:
+    print "html"
+    commands.getstatusoutput('make html')
+    if os.path.exists('_build/html'):
+        os.chdir('_build/html')
+        commands.getstatusoutput('zip -r ../'+rstconf['basename']+'.zip *')
+        os.chdir(rootPath)
+        shutil.copy('_build/'+rstconf['basename']+'.zip', 'cook') 
 
 print "cleanup"
 
