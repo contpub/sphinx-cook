@@ -31,6 +31,7 @@ rstconf['latex_logo'] = None
 rstconf['latex_contentsname'] = 'Contents'
 
 rstconf['html_theme'] = 'default'
+rstconf['html_title'] = None
 
 rstconf['epub_basename'] = None
 rstconf['epub_theme'] = 'epub'
@@ -57,6 +58,9 @@ if rstconf['latex_documents_title'] is None:
 	rstconf['latex_documents_title'] = rstconf['title']
 if rstconf['latex_documents_author'] is None:
 	rstconf['latex_documents_author'] = rstconf['authors']
+
+if rstconf['html_title'] is None:
+    rstconf['html_title'] = rstconf['title']
 
 if rstconf['epub_basename'] is None:
 	rstconf['epub_basename'] = rstconf['basename']
