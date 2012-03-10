@@ -211,11 +211,13 @@ latex_elements = {
 }
 
 # -- Options for HTML output --------------------------------------------------
+html_title = rstconf['html_title']
 html_show_sourcelink = False
 html_show_copyright = False
 html_show_sphinx = False
 html_static_path = ['_static']
 html_theme = rstconf['html_theme']
+html_theme_path = ["."]
 
 # -- Options for ePub output --------------------------------------------------
 epub_basename = rstconf['epub_basename']
