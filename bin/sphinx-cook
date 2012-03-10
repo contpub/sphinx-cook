@@ -27,7 +27,7 @@ if (sys.stdout.encoding != 'UTF-8'):
 
 opts, args = getopt.getopt(sys.argv[1:], "f:h", ['format=','help'])
 
-__opt_format = 'cover,pdf,epub,mobi'
+__opt_format = 'cover,pdf,epub,mobi,html'
 
 def help():
     print 'Examples:'
