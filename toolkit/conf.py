@@ -159,9 +159,9 @@ pdfproducer = {TeX Live},
 }
 %% \\pdfinfo{/CreationDate (D:19990909000000-01'00')}
 
-%% use xeCJK
-
-\\usepackage[slantfont,boldfont,CJKaddspaces,CJKchecksingle,CJKnumber,fallback]{xeCJK}
+%% use xeCJK (options: CJKaddspaces)
+\\usepackage[slantfont,boldfont,CJKchecksingle,CJKnumber,fallback]{xeCJK}
+\\CJKsetecglue{}
 
 %% \\usepackage{xltxtra}
 %% \\usepackage{CJKfntef}
@@ -169,7 +169,7 @@ pdfproducer = {TeX Live},
 
 \\XeTeXlinebreaklocale "zh"
 \\XeTeXlinebreakskip = 0pt plus 1pt
-\\defaultfontfeatures{Mapping=tex-text}
+%% \\defaultfontfeatures{Mapping=tex-text}
 
 \\setCJKmainfont[BoldFont={Adobe Heiti Std},ItalicFont={Adobe Fangsong Std},BoldItalicFont={Adobe Kaiti Std}]{Adobe Song Std}
 \\setCJKsansfont[BoldFont={Adobe Heiti Std},ItalicFont={Adobe Fangsong Std},BoldItalicFont={Adobe Kaiti Std}]{Adobe Song Std}
